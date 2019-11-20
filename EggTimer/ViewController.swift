@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
     // IBOutlets
@@ -18,6 +19,7 @@ class ViewController: UIViewController {
     // initialise increment as float
     var increment: Float = 1.0
     var timer = Timer()
+    var player: AVAudioPlayer!
     
     @IBAction func hardnessSelected(_ sender: UIButton) {
         // set hardness from button title
@@ -39,14 +41,22 @@ class ViewController: UIViewController {
         if secondsRemaining > 0 {
             print("\(secondsRemaining) seconds.")
             // increment progressBar
-            progressBar.progress += increment
             secondsRemaining -= 1
+            progressBar.progress += increment
         } else {
+            // play alarm
+             playSound(soundFile: "alarm")
             // reset time
             timer.invalidate()
             titleLabel.text = "DONE!"
             // fill progress bar
             progressBar.progress = 1.0
         }
+    }
+    
+    func playSound(soundFile: String) {
+        let url = Bundle.main.url(forResource: soundFile, withExtension: "mp3")
+        player = try! AVAudioPlayer(contentsOf: url!)
+        player.play()
     }
 }
